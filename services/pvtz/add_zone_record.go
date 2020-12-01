@@ -21,7 +21,6 @@ import (
 )
 
 // AddZoneRecord invokes the pvtz.AddZoneRecord API synchronously
-// api document: https://help.aliyun.com/api/pvtz/addzonerecord.html
 func (client *Client) AddZoneRecord(request *AddZoneRecordRequest) (response *AddZoneRecordResponse, err error) {
 	response = CreateAddZoneRecordResponse()
 	err = client.DoAction(request, response)
@@ -29,8 +28,6 @@ func (client *Client) AddZoneRecord(request *AddZoneRecordRequest) (response *Ad
 }
 
 // AddZoneRecordWithChan invokes the pvtz.AddZoneRecord API asynchronously
-// api document: https://help.aliyun.com/api/pvtz/addzonerecord.html
-// asynchronous document: https://help.aliyun.com/document_detail/66220.html
 func (client *Client) AddZoneRecordWithChan(request *AddZoneRecordRequest) (<-chan *AddZoneRecordResponse, <-chan error) {
 	responseChan := make(chan *AddZoneRecordResponse, 1)
 	errChan := make(chan error, 1)
@@ -53,8 +50,6 @@ func (client *Client) AddZoneRecordWithChan(request *AddZoneRecordRequest) (<-ch
 }
 
 // AddZoneRecordWithCallback invokes the pvtz.AddZoneRecord API asynchronously
-// api document: https://help.aliyun.com/api/pvtz/addzonerecord.html
-// asynchronous document: https://help.aliyun.com/document_detail/66220.html
 func (client *Client) AddZoneRecordWithCallback(request *AddZoneRecordRequest, callback func(response *AddZoneRecordResponse, err error)) <-chan int {
 	result := make(chan int, 1)
 	err := client.AddAsyncTask(func() {
@@ -77,13 +72,13 @@ func (client *Client) AddZoneRecordWithCallback(request *AddZoneRecordRequest, c
 type AddZoneRecordRequest struct {
 	*requests.RpcRequest
 	Rr           string           `position:"Query" name:"Rr"`
+	Type         string           `position:"Query" name:"Type"`
+	Priority     requests.Integer `position:"Query" name:"Priority"`
+	Ttl          requests.Integer `position:"Query" name:"Ttl"`
+	UserClientIp string           `position:"Query" name:"UserClientIp"`
 	ZoneId       string           `position:"Query" name:"ZoneId"`
 	Lang         string           `position:"Query" name:"Lang"`
-	Type         string           `position:"Query" name:"Type"`
-	Ttl          requests.Integer `position:"Query" name:"Ttl"`
-	Priority     requests.Integer `position:"Query" name:"Priority"`
 	Value        string           `position:"Query" name:"Value"`
-	UserClientIp string           `position:"Query" name:"UserClientIp"`
 }
 
 // AddZoneRecordResponse is the response struct for api AddZoneRecord
@@ -91,7 +86,7 @@ type AddZoneRecordResponse struct {
 	*responses.BaseResponse
 	RequestId string `json:"RequestId" xml:"RequestId"`
 	Success   bool   `json:"Success" xml:"Success"`
-	RecordId  int    `json:"RecordId" xml:"RecordId"`
+	RecordId  int64  `json:"RecordId" xml:"RecordId"`
 }
 
 // CreateAddZoneRecordRequest creates a request to invoke AddZoneRecord API
@@ -100,6 +95,7 @@ func CreateAddZoneRecordRequest() (request *AddZoneRecordRequest) {
 		RpcRequest: &requests.RpcRequest{},
 	}
 	request.InitWithApiInfo("pvtz", "2018-01-01", "AddZoneRecord", "pvtz", "openAPI")
+	request.Method = requests.POST
 	return
 }
 

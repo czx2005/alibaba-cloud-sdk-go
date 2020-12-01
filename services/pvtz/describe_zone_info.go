@@ -21,7 +21,6 @@ import (
 )
 
 // DescribeZoneInfo invokes the pvtz.DescribeZoneInfo API synchronously
-// api document: https://help.aliyun.com/api/pvtz/describezoneinfo.html
 func (client *Client) DescribeZoneInfo(request *DescribeZoneInfoRequest) (response *DescribeZoneInfoResponse, err error) {
 	response = CreateDescribeZoneInfoResponse()
 	err = client.DoAction(request, response)
@@ -29,8 +28,6 @@ func (client *Client) DescribeZoneInfo(request *DescribeZoneInfoRequest) (respon
 }
 
 // DescribeZoneInfoWithChan invokes the pvtz.DescribeZoneInfo API asynchronously
-// api document: https://help.aliyun.com/api/pvtz/describezoneinfo.html
-// asynchronous document: https://help.aliyun.com/document_detail/66220.html
 func (client *Client) DescribeZoneInfoWithChan(request *DescribeZoneInfoRequest) (<-chan *DescribeZoneInfoResponse, <-chan error) {
 	responseChan := make(chan *DescribeZoneInfoResponse, 1)
 	errChan := make(chan error, 1)
@@ -53,8 +50,6 @@ func (client *Client) DescribeZoneInfoWithChan(request *DescribeZoneInfoRequest)
 }
 
 // DescribeZoneInfoWithCallback invokes the pvtz.DescribeZoneInfo API asynchronously
-// api document: https://help.aliyun.com/api/pvtz/describezoneinfo.html
-// asynchronous document: https://help.aliyun.com/document_detail/66220.html
 func (client *Client) DescribeZoneInfoWithCallback(request *DescribeZoneInfoRequest, callback func(response *DescribeZoneInfoResponse, err error)) <-chan int {
 	result := make(chan int, 1)
 	err := client.AddAsyncTask(func() {
@@ -76,9 +71,9 @@ func (client *Client) DescribeZoneInfoWithCallback(request *DescribeZoneInfoRequ
 // DescribeZoneInfoRequest is the request struct for api DescribeZoneInfo
 type DescribeZoneInfoRequest struct {
 	*requests.RpcRequest
-	Lang         string `position:"Query" name:"Lang"`
-	ZoneId       string `position:"Query" name:"ZoneId"`
 	UserClientIp string `position:"Query" name:"UserClientIp"`
+	ZoneId       string `position:"Query" name:"ZoneId"`
+	Lang         string `position:"Query" name:"Lang"`
 }
 
 // DescribeZoneInfoResponse is the response struct for api DescribeZoneInfo
@@ -90,10 +85,13 @@ type DescribeZoneInfoResponse struct {
 	Remark          string   `json:"Remark" xml:"Remark"`
 	RecordCount     int      `json:"RecordCount" xml:"RecordCount"`
 	CreateTime      string   `json:"CreateTime" xml:"CreateTime"`
-	CreateTimestamp int      `json:"CreateTimestamp" xml:"CreateTimestamp"`
+	CreateTimestamp int64    `json:"CreateTimestamp" xml:"CreateTimestamp"`
 	UpdateTime      string   `json:"UpdateTime" xml:"UpdateTime"`
-	UpdateTimestamp int      `json:"UpdateTimestamp" xml:"UpdateTimestamp"`
+	UpdateTimestamp int64    `json:"UpdateTimestamp" xml:"UpdateTimestamp"`
 	IsPtr           bool     `json:"IsPtr" xml:"IsPtr"`
+	ProxyPattern    string   `json:"ProxyPattern" xml:"ProxyPattern"`
+	SlaveDns        bool     `json:"SlaveDns" xml:"SlaveDns"`
+	ResourceGroupId string   `json:"ResourceGroupId" xml:"ResourceGroupId"`
 	BindVpcs        BindVpcs `json:"BindVpcs" xml:"BindVpcs"`
 }
 
@@ -103,6 +101,7 @@ func CreateDescribeZoneInfoRequest() (request *DescribeZoneInfoRequest) {
 		RpcRequest: &requests.RpcRequest{},
 	}
 	request.InitWithApiInfo("pvtz", "2018-01-01", "DescribeZoneInfo", "pvtz", "openAPI")
+	request.Method = requests.POST
 	return
 }
 

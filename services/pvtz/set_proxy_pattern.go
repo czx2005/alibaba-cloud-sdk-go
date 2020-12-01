@@ -20,21 +20,21 @@ import (
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/responses"
 )
 
-// DeleteZone invokes the pvtz.DeleteZone API synchronously
-func (client *Client) DeleteZone(request *DeleteZoneRequest) (response *DeleteZoneResponse, err error) {
-	response = CreateDeleteZoneResponse()
+// SetProxyPattern invokes the pvtz.SetProxyPattern API synchronously
+func (client *Client) SetProxyPattern(request *SetProxyPatternRequest) (response *SetProxyPatternResponse, err error) {
+	response = CreateSetProxyPatternResponse()
 	err = client.DoAction(request, response)
 	return
 }
 
-// DeleteZoneWithChan invokes the pvtz.DeleteZone API asynchronously
-func (client *Client) DeleteZoneWithChan(request *DeleteZoneRequest) (<-chan *DeleteZoneResponse, <-chan error) {
-	responseChan := make(chan *DeleteZoneResponse, 1)
+// SetProxyPatternWithChan invokes the pvtz.SetProxyPattern API asynchronously
+func (client *Client) SetProxyPatternWithChan(request *SetProxyPatternRequest) (<-chan *SetProxyPatternResponse, <-chan error) {
+	responseChan := make(chan *SetProxyPatternResponse, 1)
 	errChan := make(chan error, 1)
 	err := client.AddAsyncTask(func() {
 		defer close(responseChan)
 		defer close(errChan)
-		response, err := client.DeleteZone(request)
+		response, err := client.SetProxyPattern(request)
 		if err != nil {
 			errChan <- err
 		} else {
@@ -49,14 +49,14 @@ func (client *Client) DeleteZoneWithChan(request *DeleteZoneRequest) (<-chan *De
 	return responseChan, errChan
 }
 
-// DeleteZoneWithCallback invokes the pvtz.DeleteZone API asynchronously
-func (client *Client) DeleteZoneWithCallback(request *DeleteZoneRequest, callback func(response *DeleteZoneResponse, err error)) <-chan int {
+// SetProxyPatternWithCallback invokes the pvtz.SetProxyPattern API asynchronously
+func (client *Client) SetProxyPatternWithCallback(request *SetProxyPatternRequest, callback func(response *SetProxyPatternResponse, err error)) <-chan int {
 	result := make(chan int, 1)
 	err := client.AddAsyncTask(func() {
-		var response *DeleteZoneResponse
+		var response *SetProxyPatternResponse
 		var err error
 		defer close(result)
-		response, err = client.DeleteZone(request)
+		response, err = client.SetProxyPattern(request)
 		callback(response, err)
 		result <- 1
 	})
@@ -68,34 +68,35 @@ func (client *Client) DeleteZoneWithCallback(request *DeleteZoneRequest, callbac
 	return result
 }
 
-// DeleteZoneRequest is the request struct for api DeleteZone
-type DeleteZoneRequest struct {
+// SetProxyPatternRequest is the request struct for api SetProxyPattern
+type SetProxyPatternRequest struct {
 	*requests.RpcRequest
+	ProxyPattern string `position:"Query" name:"ProxyPattern"`
 	UserClientIp string `position:"Query" name:"UserClientIp"`
 	ZoneId       string `position:"Query" name:"ZoneId"`
 	Lang         string `position:"Query" name:"Lang"`
 }
 
-// DeleteZoneResponse is the response struct for api DeleteZone
-type DeleteZoneResponse struct {
+// SetProxyPatternResponse is the response struct for api SetProxyPattern
+type SetProxyPatternResponse struct {
 	*responses.BaseResponse
 	RequestId string `json:"RequestId" xml:"RequestId"`
 	ZoneId    string `json:"ZoneId" xml:"ZoneId"`
 }
 
-// CreateDeleteZoneRequest creates a request to invoke DeleteZone API
-func CreateDeleteZoneRequest() (request *DeleteZoneRequest) {
-	request = &DeleteZoneRequest{
+// CreateSetProxyPatternRequest creates a request to invoke SetProxyPattern API
+func CreateSetProxyPatternRequest() (request *SetProxyPatternRequest) {
+	request = &SetProxyPatternRequest{
 		RpcRequest: &requests.RpcRequest{},
 	}
-	request.InitWithApiInfo("pvtz", "2018-01-01", "DeleteZone", "pvtz", "openAPI")
+	request.InitWithApiInfo("pvtz", "2018-01-01", "SetProxyPattern", "pvtz", "openAPI")
 	request.Method = requests.POST
 	return
 }
 
-// CreateDeleteZoneResponse creates a response to parse from DeleteZone response
-func CreateDeleteZoneResponse() (response *DeleteZoneResponse) {
-	response = &DeleteZoneResponse{
+// CreateSetProxyPatternResponse creates a response to parse from SetProxyPattern response
+func CreateSetProxyPatternResponse() (response *SetProxyPatternResponse) {
+	response = &SetProxyPatternResponse{
 		BaseResponse: &responses.BaseResponse{},
 	}
 	return

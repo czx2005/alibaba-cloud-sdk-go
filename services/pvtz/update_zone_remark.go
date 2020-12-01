@@ -21,7 +21,6 @@ import (
 )
 
 // UpdateZoneRemark invokes the pvtz.UpdateZoneRemark API synchronously
-// api document: https://help.aliyun.com/api/pvtz/updatezoneremark.html
 func (client *Client) UpdateZoneRemark(request *UpdateZoneRemarkRequest) (response *UpdateZoneRemarkResponse, err error) {
 	response = CreateUpdateZoneRemarkResponse()
 	err = client.DoAction(request, response)
@@ -29,8 +28,6 @@ func (client *Client) UpdateZoneRemark(request *UpdateZoneRemarkRequest) (respon
 }
 
 // UpdateZoneRemarkWithChan invokes the pvtz.UpdateZoneRemark API asynchronously
-// api document: https://help.aliyun.com/api/pvtz/updatezoneremark.html
-// asynchronous document: https://help.aliyun.com/document_detail/66220.html
 func (client *Client) UpdateZoneRemarkWithChan(request *UpdateZoneRemarkRequest) (<-chan *UpdateZoneRemarkResponse, <-chan error) {
 	responseChan := make(chan *UpdateZoneRemarkResponse, 1)
 	errChan := make(chan error, 1)
@@ -53,8 +50,6 @@ func (client *Client) UpdateZoneRemarkWithChan(request *UpdateZoneRemarkRequest)
 }
 
 // UpdateZoneRemarkWithCallback invokes the pvtz.UpdateZoneRemark API asynchronously
-// api document: https://help.aliyun.com/api/pvtz/updatezoneremark.html
-// asynchronous document: https://help.aliyun.com/document_detail/66220.html
 func (client *Client) UpdateZoneRemarkWithCallback(request *UpdateZoneRemarkRequest, callback func(response *UpdateZoneRemarkResponse, err error)) <-chan int {
 	result := make(chan int, 1)
 	err := client.AddAsyncTask(func() {
@@ -76,10 +71,10 @@ func (client *Client) UpdateZoneRemarkWithCallback(request *UpdateZoneRemarkRequ
 // UpdateZoneRemarkRequest is the request struct for api UpdateZoneRemark
 type UpdateZoneRemarkRequest struct {
 	*requests.RpcRequest
-	Lang         string `position:"Query" name:"Lang"`
-	ZoneId       string `position:"Query" name:"ZoneId"`
 	Remark       string `position:"Query" name:"Remark"`
 	UserClientIp string `position:"Query" name:"UserClientIp"`
+	ZoneId       string `position:"Query" name:"ZoneId"`
+	Lang         string `position:"Query" name:"Lang"`
 }
 
 // UpdateZoneRemarkResponse is the response struct for api UpdateZoneRemark
@@ -95,6 +90,7 @@ func CreateUpdateZoneRemarkRequest() (request *UpdateZoneRemarkRequest) {
 		RpcRequest: &requests.RpcRequest{},
 	}
 	request.InitWithApiInfo("pvtz", "2018-01-01", "UpdateZoneRemark", "pvtz", "openAPI")
+	request.Method = requests.POST
 	return
 }
 
