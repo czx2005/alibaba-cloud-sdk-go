@@ -21,7 +21,6 @@ import (
 )
 
 // BindZoneVpc invokes the pvtz.BindZoneVpc API synchronously
-// api document: https://help.aliyun.com/api/pvtz/bindzonevpc.html
 func (client *Client) BindZoneVpc(request *BindZoneVpcRequest) (response *BindZoneVpcResponse, err error) {
 	response = CreateBindZoneVpcResponse()
 	err = client.DoAction(request, response)
@@ -29,8 +28,6 @@ func (client *Client) BindZoneVpc(request *BindZoneVpcRequest) (response *BindZo
 }
 
 // BindZoneVpcWithChan invokes the pvtz.BindZoneVpc API asynchronously
-// api document: https://help.aliyun.com/api/pvtz/bindzonevpc.html
-// asynchronous document: https://help.aliyun.com/document_detail/66220.html
 func (client *Client) BindZoneVpcWithChan(request *BindZoneVpcRequest) (<-chan *BindZoneVpcResponse, <-chan error) {
 	responseChan := make(chan *BindZoneVpcResponse, 1)
 	errChan := make(chan error, 1)
@@ -53,8 +50,6 @@ func (client *Client) BindZoneVpcWithChan(request *BindZoneVpcRequest) (<-chan *
 }
 
 // BindZoneVpcWithCallback invokes the pvtz.BindZoneVpc API asynchronously
-// api document: https://help.aliyun.com/api/pvtz/bindzonevpc.html
-// asynchronous document: https://help.aliyun.com/document_detail/66220.html
 func (client *Client) BindZoneVpcWithCallback(request *BindZoneVpcRequest, callback func(response *BindZoneVpcResponse, err error)) <-chan int {
 	result := make(chan int, 1)
 	err := client.AddAsyncTask(func() {
@@ -76,10 +71,10 @@ func (client *Client) BindZoneVpcWithCallback(request *BindZoneVpcRequest, callb
 // BindZoneVpcRequest is the request struct for api BindZoneVpc
 type BindZoneVpcRequest struct {
 	*requests.RpcRequest
-	Lang         string             `position:"Query" name:"Lang"`
-	ZoneId       string             `position:"Query" name:"ZoneId"`
-	Vpcs         *[]BindZoneVpcVpcs `position:"Query" name:"Vpcs"  type:"Repeated"`
 	UserClientIp string             `position:"Query" name:"UserClientIp"`
+	ZoneId       string             `position:"Query" name:"ZoneId"`
+	Lang         string             `position:"Query" name:"Lang"`
+	Vpcs         *[]BindZoneVpcVpcs `position:"Query" name:"Vpcs"  type:"Repeated"`
 }
 
 // BindZoneVpcVpcs is a repeated param struct in BindZoneVpcRequest
@@ -100,6 +95,7 @@ func CreateBindZoneVpcRequest() (request *BindZoneVpcRequest) {
 		RpcRequest: &requests.RpcRequest{},
 	}
 	request.InitWithApiInfo("pvtz", "2018-01-01", "BindZoneVpc", "pvtz", "openAPI")
+	request.Method = requests.POST
 	return
 }
 

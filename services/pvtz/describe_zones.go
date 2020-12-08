@@ -21,7 +21,6 @@ import (
 )
 
 // DescribeZones invokes the pvtz.DescribeZones API synchronously
-// api document: https://help.aliyun.com/api/pvtz/describezones.html
 func (client *Client) DescribeZones(request *DescribeZonesRequest) (response *DescribeZonesResponse, err error) {
 	response = CreateDescribeZonesResponse()
 	err = client.DoAction(request, response)
@@ -29,8 +28,6 @@ func (client *Client) DescribeZones(request *DescribeZonesRequest) (response *De
 }
 
 // DescribeZonesWithChan invokes the pvtz.DescribeZones API asynchronously
-// api document: https://help.aliyun.com/api/pvtz/describezones.html
-// asynchronous document: https://help.aliyun.com/document_detail/66220.html
 func (client *Client) DescribeZonesWithChan(request *DescribeZonesRequest) (<-chan *DescribeZonesResponse, <-chan error) {
 	responseChan := make(chan *DescribeZonesResponse, 1)
 	errChan := make(chan error, 1)
@@ -53,8 +50,6 @@ func (client *Client) DescribeZonesWithChan(request *DescribeZonesRequest) (<-ch
 }
 
 // DescribeZonesWithCallback invokes the pvtz.DescribeZones API asynchronously
-// api document: https://help.aliyun.com/api/pvtz/describezones.html
-// asynchronous document: https://help.aliyun.com/document_detail/66220.html
 func (client *Client) DescribeZonesWithCallback(request *DescribeZonesRequest, callback func(response *DescribeZonesResponse, err error)) <-chan int {
 	result := make(chan int, 1)
 	err := client.AddAsyncTask(func() {
@@ -76,11 +71,17 @@ func (client *Client) DescribeZonesWithCallback(request *DescribeZonesRequest, c
 // DescribeZonesRequest is the request struct for api DescribeZones
 type DescribeZonesRequest struct {
 	*requests.RpcRequest
-	Lang         string           `position:"Query" name:"Lang"`
-	PageNumber   requests.Integer `position:"Query" name:"PageNumber"`
-	PageSize     requests.Integer `position:"Query" name:"PageSize"`
-	Keyword      string           `position:"Query" name:"Keyword"`
-	UserClientIp string           `position:"Query" name:"UserClientIp"`
+	QueryVpcId      string           `position:"Query" name:"QueryVpcId"`
+	PageNumber      requests.Integer `position:"Query" name:"PageNumber"`
+	ResourceGroupId string           `position:"Query" name:"ResourceGroupId"`
+	PageSize        requests.Integer `position:"Query" name:"PageSize"`
+	Lang            string           `position:"Query" name:"Lang"`
+	Keyword         string           `position:"Query" name:"Keyword"`
+	Direction       string           `position:"Query" name:"Direction"`
+	OrderBy         string           `position:"Query" name:"OrderBy"`
+	UserClientIp    string           `position:"Query" name:"UserClientIp"`
+	SearchMode      string           `position:"Query" name:"SearchMode"`
+	QueryRegionId   string           `position:"Query" name:"QueryRegionId"`
 }
 
 // DescribeZonesResponse is the response struct for api DescribeZones
@@ -100,6 +101,7 @@ func CreateDescribeZonesRequest() (request *DescribeZonesRequest) {
 		RpcRequest: &requests.RpcRequest{},
 	}
 	request.InitWithApiInfo("pvtz", "2018-01-01", "DescribeZones", "pvtz", "openAPI")
+	request.Method = requests.POST
 	return
 }
 
