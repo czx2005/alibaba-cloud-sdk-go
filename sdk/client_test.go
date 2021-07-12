@@ -20,12 +20,13 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"testing"
 
-	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/auth/credentials/provider"
-	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/responses"
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/auth/credentials"
+	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/auth/credentials/provider"
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
+	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/responses"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -160,6 +161,36 @@ func Test_DoAction(t *testing.T) {
 	response := responses.NewCommonResponse()
 	client.SetHTTPDoHook(func(fn func(req *http.Request) (*http.Response, error)) func(req *http.Request) (*http.Response, error) {
 		return func(req *http.Request) (*http.Response, error) {
+			return mockResponse(200, "")
+		}
+	})
+	err = client.DoAction(request, response)
+	assert.Nil(t, err)
+	assert.Equal(t, 200, response.GetHttpStatus())
+	assert.Equal(t, "", response.GetHttpContentString())
+	client.Shutdown()
+	assert.Equal(t, false, client.isRunning)
+}
+
+func Test_CustomEndpoint(t *testing.T) {
+	client, err := NewClientWithAccessKey("regionid", "acesskeyid", "accesskeysecret")
+	assert.Nil(t, err)
+	assert.NotNil(t, client)
+	assert.Equal(t, true, client.isRunning)
+	client.SetEndpoint("https://abc.com")
+	request := requests.NewCommonRequest()
+	request.Version = "2014-05-26"
+	request.ApiName = "DescribeInstanceStatus"
+
+	request.QueryParams["PageNumber"] = "1"
+	request.QueryParams["PageSize"] = "30"
+	request.TransToAcsRequest()
+	response := responses.NewCommonResponse()
+	client.SetHTTPDoHook(func(fn func(req *http.Request) (*http.Response, error)) func(req *http.Request) (*http.Response, error) {
+		return func(req *http.Request) (*http.Response, error) {
+			assert.Equal(t, "abc.com", req.Host)
+			assert.Equal(t, "abc.com", req.URL.Host)
+			assert.Equal(t, true, strings.HasPrefix(req.URL.String(), "https://abc.com"))
 			return mockResponse(200, "")
 		}
 	})
