@@ -17,6 +17,7 @@ package sdk
 import (
 	"fmt"
 	"net/http"
+	"net/url"
 	"strconv"
 	"sync"
 
@@ -49,6 +50,8 @@ var defaultHTTPDoHook HTTPDoHook = func(fn func(req *http.Request) (*http.Respon
 // Client the type Client
 type Client struct {
 	regionId       string
+	scheme         string
+	domain         string
 	config         *Config
 	signer         auth.Signer
 	httpClient     *http.Client
@@ -68,6 +71,16 @@ func (client *Client) Init() (err error) {
 // SetHTTPDoHook ...
 func (client *Client) SetHTTPDoHook(hook HTTPDoHook) {
 	client.httpDoHook = hook
+}
+
+// SetEndpoint ...
+func (client *Client) SetEndpoint(ep string) {
+	u, err := url.Parse(ep)
+	if err != nil {
+		panic(fmt.Sprintf("invalid endpoint: %s, parse err: %v", ep, err))
+	}
+	client.domain = u.Host
+	client.scheme = u.Scheme
 }
 
 // InitWithProviderChain will get credential from the providerChain,
@@ -215,13 +228,21 @@ func (client *Client) buildRequestWithSigner(request requests.AcsRequest, signer
 		LocationEndpointType: request.GetLocationEndpointType(),
 		CommonApi:            client.ProcessCommonRequest,
 	}
-	endpoint, err := endpoints.Resolve(resolveParam)
-	if err != nil {
-		return
+	if domain := client.domain; domain != "" {
+		request.SetDomain(domain)
+	} else {
+		endpoint, err := endpoints.Resolve(resolveParam)
+		if err != nil {
+			return nil, err
+		}
+		request.SetDomain(endpoint)
 	}
-	request.SetDomain(endpoint)
 	if request.GetScheme() == "" {
-		request.SetScheme(client.config.Scheme)
+		if scheme := client.scheme; scheme != "" {
+			request.SetScheme(scheme)
+		} else {
+			request.SetScheme(client.config.Scheme)
+		}
 	}
 	// init request params
 	err = requests.InitParams(request)
