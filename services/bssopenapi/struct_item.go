@@ -23,6 +23,7 @@ type Item struct {
 	UsageStartTime              string  `json:"UsageStartTime" xml:"UsageStartTime"`
 	SuborderID                  string  `json:"SuborderID" xml:"SuborderID"`
 	SolutionCode                string  `json:"SolutionCode" xml:"SolutionCode"`
+	ProductDetail               string  `json:"ProductDetail" xml:"ProductDetail"`
 	Promotion                   string  `json:"Promotion" xml:"Promotion"`
 	Seller                      string  `json:"Seller" xml:"Seller"`
 	PretaxAmountLocal           float64 `json:"PretaxAmountLocal" xml:"PretaxAmountLocal"`
@@ -37,6 +38,7 @@ type Item struct {
 	Config                      string  `json:"Config" xml:"Config"`
 	Status                      string  `json:"Status" xml:"Status"`
 	Item                        string  `json:"Item" xml:"Item"`
+	ProductName                 string  `json:"ProductName" xml:"ProductName"`
 	Region                      string  `json:"Region" xml:"Region"`
 	PaymentAmount               float64 `json:"PaymentAmount" xml:"PaymentAmount"`
 	UsageEndTime                string  `json:"UsageEndTime" xml:"UsageEndTime"`
